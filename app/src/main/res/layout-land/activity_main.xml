@@ -5,21 +5,24 @@
 
     <ImageView
         android:id="@+id/iv_card_photo"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
         android:src="@drawable/pic"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:paddingTop="0dp"
+        android:adjustViewBounds="true"
+        android:focusable="false"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_main_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/iv_card_photo"
-        android:orientation="vertical"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@id/iv_card_photo"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
         <LinearLayout
+            android:id="@+id/info1"
             android:layout_width="match_parent"
             android:layout_height="28dp"
             android:layout_marginTop="15dp"
@@ -39,8 +42,10 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/info2"
             android:layout_width="match_parent"
             android:layout_height="28dp"
+            android:layout_below="@id/info1"
             android:layout_marginTop="15dp"
             android:gravity="center_vertical">
 
@@ -58,69 +63,73 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/sep1"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
+            android:layout_below="@id/info2"
             android:layout_marginTop="15dp"
             android:background="@color/separatorColor" />
 
         <TextView
+            android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/sep1"
             android:layout_marginTop="15dp"
             android:text="@string/description"
             android:textSize="16sp" />
 
         <View
+            android:id="@+id/sep2"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
+            android:layout_below="@id/tv_description"
             android:layout_marginTop="15dp"
             android:background="@color/separatorColor" />
 
         <EditText
             android:id="@+id/et_message"
+            android:layout_below="@id/sep2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/emailHint" />
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_send_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_main_info"
-        android:layout_alignEnd="@id/ll_main_info"
-        android:textSize="16sp"
-        android:textColor="#d11111"
-        android:layout_marginEnd="50dp"
-        android:layout_marginTop="10dp"
-        android:textAllCaps="true"
-        android:text="@string/sendMessage"/>
+        <TextView
+            android:id="@+id/tv_send_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_message"
+            android:textSize="16sp"
+            android:textColor="#d11111"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentEnd="true"
+            android:textAllCaps="true"
+            android:text="@string/sendMessage"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp">
-        <ImageButton
-            android:id="@+id/ib_inst"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/instagram"
-            android:layout_marginEnd="8dp"/>
-        <ImageButton
-            android:id="@+id/ib_tel"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/telegram"
-            android:layout_marginEnd="8dp"/>
-        <ImageButton
-            android:id="@+id/ib_gplus"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/google_plus"/>
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp">
+            <ImageButton
+                android:id="@+id/ib_inst"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/instagram"
+                android:layout_marginEnd="8dp"/>
+            <ImageButton
+                android:id="@+id/ib_tel"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/telegram"
+                android:layout_marginEnd="8dp"/>
+            <ImageButton
+                android:id="@+id/ib_gplus"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/google_plus"/>
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>
