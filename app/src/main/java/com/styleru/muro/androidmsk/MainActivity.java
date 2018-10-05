@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RelativeLayout mainContainer = findViewById(R.id.main_container);
+        TextView disclaimer = new TextView(this);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.BELOW, R.id.media);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        disclaimer.setLayoutParams(params);
+        disclaimer.setText(getString(R.string.disclaimer));
+
+        mainContainer.addView(disclaimer);
 
         mMessageText = findViewById(R.id.et_message);
         ImageButton mVk = findViewById(R.id.ib_gplus);

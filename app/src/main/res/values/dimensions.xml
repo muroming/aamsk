@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_big">16sp</dimen>
+    <dimen name="inner_padding_big_port">50dp</dimen>
+    <dimen name="inner_padding_big_land">20dp</dimen>
+    <dimen name="vertical_padding">20dp</dimen>
+    <dimen name="image_width_big_land">300dp</dimen>
+    <dimen name="image_height_big_vert">200dp</dimen>
+    <dimen name="titles_height_big">28dp</dimen>
+    <dimen name="icons_big">50dp</dimen>
+</resources>
