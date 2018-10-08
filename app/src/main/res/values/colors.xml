@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="separatorColor">#ce3030</color>
+    <color name="clickableText">#d11111</color>
 </resources>
