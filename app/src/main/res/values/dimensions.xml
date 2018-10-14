@@ -8,4 +8,10 @@
     <dimen name="image_height_big_vert">200dp</dimen>
     <dimen name="titles_height_big">28dp</dimen>
     <dimen name="icons_big">50dp</dimen>
+    <dimen name="side_padding_news_card">10dp</dimen>
+    <dimen name="vert_padding_news_card">15dp</dimen>
+    <dimen name="spacing_news_card">8dp</dimen>
+    <dimen name="spacing_news_recycler">5dp</dimen>
+    <dimen name="news_image_size">100dp</dimen>
+    <dimen name="news_details_padding">10dp</dimen>
 </resources>
