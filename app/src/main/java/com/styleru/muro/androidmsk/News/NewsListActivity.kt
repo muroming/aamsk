@@ -43,11 +43,15 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
                 val items = DataUtils.generateNews()
                 for (item in items) {
                     it.onNext(item)
-                    Thread.sleep(1000)
+                    Thread.sleep(500)
                 }
                 it.onComplete()
             } catch (e: Exception) {
-                it.onError(e)
+                if (e is InterruptedException) {
+                    Log.d(ERROR, e.toString())
+                } else {
+                    it.onError(e)
+                }
             }
         }
 
@@ -55,17 +59,17 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                {
-                    adapter.addItem(it)
-                    Log.d("LOG_TAG", it.title)
-                },
-                {
-
-                },
-                {
-                    progress_bar.visibility = View.INVISIBLE
-                    newsRecycler.visibility = View.VISIBLE
-                })
+                        {
+                            adapter.addItem(it)
+                            Log.d("LOG_TAG", it.title)
+                        },
+                        {
+                            Log.d(ERROR, it.localizedMessage)
+                        },
+                        {
+                            progress_bar.visibility = View.INVISIBLE
+                            newsRecycler.visibility = View.VISIBLE
+                        })
 
         adapter.setClickListener(this)
 
