@@ -9,9 +9,15 @@ import com.squareup.picasso.Picasso
 import com.styleru.muro.androidmsk.Data.NewsItem
 import com.styleru.muro.androidmsk.R
 import kotlinx.android.synthetic.main.news_item.view.*
-import java.lang.ref.WeakReference
 
-class NewsAdapter(private val items: List<NewsItem>, private val context: Context) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
+class NewsAdapter(private val context: Context) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
+
+    private val items: MutableList<NewsItem> = ArrayList()
+
+    fun addItem(item: NewsItem){
+        items.add(item)
+        notifyItemChanged(items.lastIndex)
+    }
 
     interface ViewHolderClick {
         fun onClick(newsItem: NewsItem)
@@ -37,10 +43,11 @@ class NewsAdapter(private val items: List<NewsItem>, private val context: Contex
         p0.prev.text = newsItem.previewText
         p0.date.text = newsItem.publishDate.toString()
         p0.item = newsItem
-        val imageSize: Int = context.resources.getDimensionPixelSize(R.dimen.news_image_size)
+
         Picasso.get()
                 .load(newsItem.imageUrl)
-                .resize(imageSize, imageSize)
+                .fit()
+                .centerCrop()
                 .into(p0.image)
     }
 

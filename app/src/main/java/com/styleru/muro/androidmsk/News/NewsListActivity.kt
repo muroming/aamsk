@@ -6,46 +6,83 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.styleru.muro.androidmsk.Data.DataUtils
 import com.styleru.muro.androidmsk.Data.NewsItem
 import com.styleru.muro.androidmsk.*
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_news_list.*
+import java.lang.Exception
 
 class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
 
-    private val adapter: NewsAdapter = NewsAdapter(DataUtils.generateNews(), this)
+    private val adapter: NewsAdapter = NewsAdapter(this)
+    private lateinit var disposable: Disposable
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news_list)
 
-        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
-            rv_news_recycler.layoutManager = LinearLayoutManager(this)
+        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            newsRecycler.layoutManager = LinearLayoutManager(this)
         } else {
-            rv_news_recycler.layoutManager = GridLayoutManager(this, 2)
+            newsRecycler.layoutManager = GridLayoutManager(this, 2)
         }
 
+        newsRecycler.adapter = adapter
+
+        val newsObservable: Observable<NewsItem> = Observable.create {
+            try {
+                val items = DataUtils.generateNews()
+                for (item in items) {
+                    it.onNext(item)
+                    Thread.sleep(1000)
+                }
+                it.onComplete()
+            } catch (e: Exception) {
+                it.onError(e)
+            }
+        }
+
+        disposable = newsObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                {
+                    adapter.addItem(it)
+                    Log.d("LOG_TAG", it.title)
+                },
+                {
+
+                },
+                {
+                    progress_bar.visibility = View.INVISIBLE
+                    newsRecycler.visibility = View.VISIBLE
+                })
+
         adapter.setClickListener(this)
-        rv_news_recycler.adapter = adapter
-        adapter.notifyDataSetChanged()
 
     }
 
     override fun onClick(newsItem: NewsItem) {
-        val intent = Intent(this, NewsDetailsActivity::class.java)
-        intent.putExtra(TEXT, newsItem.fullText)
-        intent.putExtra(TITLE, newsItem.title)
-        intent.putExtra(DATE, newsItem.publishDate)
-        intent.putExtra(IMAGE_URL, newsItem.imageUrl)
-
-        startActivity(intent)
+        NewsDetailsActivity.start(newsItem, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        disposable.dispose()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =

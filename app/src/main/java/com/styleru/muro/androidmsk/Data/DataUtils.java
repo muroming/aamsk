@@ -51,6 +51,7 @@ public class DataUtils {
                         + "dozens of risky selfie videos. Two men were recently rescued after being injured while being filmed at "
                         + "Hermit Falls."
         ));
+
         news.add(new NewsItem(
                 "Bear saved after getting his head stuck in milk can",
                 "https://e3.365dm.com/18/09/2048x1152/skynews-bear-minnesota_4419111.jpg",
@@ -68,6 +69,7 @@ public class DataUtils {
                         + "accident victims - and a spreader to pry the can off.\n\n"
                         + "After being released, the seemingly healthy bear ran off into the woods."
         ));
+
         news.add(new NewsItem(
                 "Nearly $18m of cocaine seized in donated boxes of bananas",
                 "https://e3.365dm.com/18/09/2048x1152/skynews-texas-bananas-drugs_4430760.jpg",
@@ -88,6 +90,7 @@ public class DataUtils {
                         + "\"They immediately notified port authorities and awaited their instruction.\""
                         + "US Customs arrived and tested the substance, which confirmed the powder was cocaine."
         ));
+
         news.add(new NewsItem(
                 "US government hacker jailed after losing secrets",
                 "https://e3.365dm.com/17/09/736x414/d55722dc4eb37f6959d2e047c14710d586aab99f90aa1e4acfd9f992125294f5_4107038.jpg",
@@ -112,6 +115,7 @@ public class DataUtils {
                         + " that an NSA employee had actually been hacked when he downloaded pirate software and disabled "
                         + "Kaspersky's anti-virus."
         ));
+
         news.add(new NewsItem(
                 "Wet Wet Wet announce Liberty X star Kevin Simm as new frontman",
                 "https://e3.365dm.com/18/09/2048x1152/skynews-wet-wet-wet-kevin-simm_4433314.jpg",

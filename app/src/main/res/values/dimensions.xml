@@ -14,4 +14,9 @@
     <dimen name="spacing_news_recycler">5dp</dimen>
     <dimen name="news_image_size">100dp</dimen>
     <dimen name="news_details_padding">10dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="news_details_title_size">15sp</dimen>
+    <dimen name="news_details_date_size">15sp</dimen>
+    <dimen name="news_details_text_size">15sp</dimen>
+    <dimen name="news_image_margin_start">10dp</dimen>
 </resources>
