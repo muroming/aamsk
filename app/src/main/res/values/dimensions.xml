@@ -19,4 +19,6 @@
     <dimen name="news_details_date_size">15sp</dimen>
     <dimen name="news_details_text_size">15sp</dimen>
     <dimen name="news_image_margin_start">10dp</dimen>
+    <dimen name="refreshButtonHeight">100dp</dimen>
+    <dimen name="refreshButtonWidth">300dp</dimen>
 </resources>

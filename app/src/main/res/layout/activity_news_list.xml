@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".News.NewsListActivity">
 
+    <TextView
+        android:id="@+id/sectionName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"/>
+
     <ProgressBar
-        android:id="@+id/progress_bar"
+        android:id="@+id/progressBar"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/newsRecycler"
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    
+    <Button
+        android:id="@+id/reloadNewsButton"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:visibility="invisible"
+        android:text="@string/reloadNews"
+        android:layout_gravity="center"/>
 
-</FrameLayout>
+</LinearLayout>

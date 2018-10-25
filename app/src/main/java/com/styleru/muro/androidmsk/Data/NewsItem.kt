@@ -1,7 +1,11 @@
 package com.styleru.muro.androidmsk.Data
 
-import java.util.Date
+import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-class NewsItem(val title: String, val imageUrl: String,
-               val category: Category, val publishDate: Date,
-               val previewText: String, val fullText: String)
+data class NewsItem(@SerializedName("section") val section: String?,
+                    @SerializedName("title") val title: String,
+                    @SerializedName("abstract") val abstract: String,
+                    @SerializedName("published_date") val publishedDate: String,
+                    @SerializedName("multimedia") val multimedia: List<Multimedia>?,
+                    @SerializedName("url") val url: String)
