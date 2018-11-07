@@ -7,11 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".News.NewsListActivity">
 
-    <TextView
+    <Button
         android:id="@+id/sectionName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
+        android:textAllCaps="false"
+        android:textStyle="normal"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"/>
@@ -22,18 +24,20 @@
         android:layout_height="100dp"
         android:layout_gravity="center" />
 
+    <Button
+        android:id="@+id/reloadNewsButton"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:text="@string/reloadNews"
+        android:visibility="gone"
+        android:layout_gravity="center"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/newsRecycler"
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     
-    <Button
-        android:id="@+id/reloadNewsButton"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:visibility="invisible"
-        android:text="@string/reloadNews"
-        android:layout_gravity="center"/>
+
 
 </LinearLayout>

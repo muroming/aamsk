@@ -62,7 +62,7 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
     }
 
     private fun loadNewData(){
-        reloadNewsButton.visibility = View.INVISIBLE
+        reloadNewsButton.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
 
         if (!disposable.isDisposed) {
