@@ -7,27 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".News.NewsListActivity">
 
-    <Button
-        android:id="@+id/sectionName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textAllCaps="false"
-        android:textStyle="normal"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"/>
-
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/progressBarSize"
+        android:layout_height="@dimen/progressBarSize"
         android:layout_gravity="center" />
 
     <Button
         android:id="@+id/reloadNewsButton"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/refreshButtonWidth"
+        android:layout_height="@dimen/refreshButtonHeight"
         android:text="@string/reloadNews"
         android:visibility="gone"
         android:layout_gravity="center"/>

@@ -8,15 +8,12 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class Network private constructor() {
-    private object holder {
-        val instance = Network()
-    }
+object Network {
 
     private val client: NYTimesClient
     private val okHttp: OkHttpClient
     private val retrofit: Retrofit
-    private val apiKey = "8b48059eabb04f098252e3ddebd6a1f5"
+    private const val apiKey = "8b48059eabb04f098252e3ddebd6a1f5"
 
     init {
         val logInterceptor = HttpLoggingInterceptor()
@@ -35,10 +32,6 @@ class Network private constructor() {
                 .build()
 
         client = retrofit.create(NYTimesClient::class.java)
-    }
-
-    companion object {
-        val instance: Network by lazy { holder.instance }
     }
 
     fun getApiClient(): NYTimesClient = client

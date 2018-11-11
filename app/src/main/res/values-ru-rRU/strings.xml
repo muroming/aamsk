@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AndroidMsk</string>
+    <string name="info1">Senior Android Developer</string>
+    <string name="info2">Amazon CEO</string>
+    <string name="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse in erat et est vestibulum porta eget ac velit. Suspendisse consequat.</string>
+    <string name="emailHint">Введите сообщение</string>
+    <string name="sendMessage">Отправить сообщение</string>
+    <string name="telegram">Лол неа</string>
+    <string name="disclaimer">\@2018 | Никита Типун</string>
+    <string name="email">ulamog345@gmail.com</string>
+    <string name="instagram">https://instagram.com/ruintheceremony/</string>
+    <string name="vk">https://vk.com/topmageinru</string>
+    <string name="about">О приложении</string>
+    <string name="reloadNews">Загрузить ещё раз</string>
+</resources>

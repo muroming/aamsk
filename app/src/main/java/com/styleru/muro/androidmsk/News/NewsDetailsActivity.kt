@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import com.styleru.muro.androidmsk.*
 import com.styleru.muro.androidmsk.Data.NewsItem
 import kotlinx.android.synthetic.main.activity_news_details.*
@@ -23,6 +25,17 @@ class NewsDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_news_details)
         val url = intent.getStringExtra(URL)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         newsDetailsWebView.loadUrl(url)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean =
+        when (item?.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
 }

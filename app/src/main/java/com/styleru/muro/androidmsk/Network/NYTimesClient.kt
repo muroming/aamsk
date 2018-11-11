@@ -10,5 +10,5 @@ import retrofit2.http.Query
 
 interface NYTimesClient{
     @GET("/svc/topstories/v2/{section}.{type}")
-    fun getNews(@Path("section") section: String, @Path("type") type: String): Single<Response>
+    fun getNews(@Path("section") section: String, @Path("type") type: String = "json"): Single<Response>
 }

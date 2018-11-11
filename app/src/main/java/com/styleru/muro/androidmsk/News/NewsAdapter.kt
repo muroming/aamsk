@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.styleru.muro.androidmsk.Data.Multimedia
 import com.styleru.muro.androidmsk.Data.NewsItem
 import com.styleru.muro.androidmsk.R
 import kotlinx.android.synthetic.main.news_item.view.*
@@ -33,27 +32,27 @@ class NewsAdapter(private val context: Context) : RecyclerView.Adapter<NewsAdapt
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
-        val newsItem = items[p1]
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val newsItem = items[position]
         if(newsItem.section != null) {
-            p0.category.text = newsItem.section
+            holder.category.text = newsItem.section
         } else {
-            p0.category.visibility = View.GONE
+            holder.category.visibility = View.GONE
         }
-        p0.title.text = newsItem.title
-        p0.prev.text = newsItem.abstract
-        p0.date.text = newsItem.publishedDate
-        p0.item = newsItem
+        holder.title.text = newsItem.title
+        holder.prev.text = newsItem.abstract
+        holder.date.text = newsItem.publishedDate
+        holder.item = newsItem
 
         if (newsItem.multimedia!= null){
             var url = ""
             if (newsItem.multimedia.isNotEmpty()){
                 url = newsItem.multimedia[0].url
             }
-            Glide.with(p0.view)
+            Glide.with(holder.view)
                     .load(url)
                     .apply(RequestOptions().placeholder(R.drawable.ic_baseline_panorama_24px))
-                    .into(p0.image)
+                    .into(holder.image)
 
         }
     }

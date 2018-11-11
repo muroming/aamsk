@@ -4,12 +4,13 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import com.styleru.muro.androidmsk.Data.NewsItem
 import com.styleru.muro.androidmsk.*
@@ -24,7 +25,7 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
 
     private val adapter: NewsAdapter = NewsAdapter(this)
     private lateinit var disposable: Disposable
-    private val client = Network.instance.getApiClient()
+    private val client = Network.getApiClient()
     private var section = "technology"
 
 
@@ -39,9 +40,8 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
         }
 
         newsRecycler.adapter = adapter
-        sectionName.text = section
 
-        disposable = client.getNews(section, "json")
+        disposable = client.getNews(section)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     onLoadSuccess(response)
@@ -51,17 +51,12 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
 
         adapter.setClickListener(this)
 
-
-        sectionName.setOnClickListener {
-            showSelectionDialog()
-        }
-
         reloadNewsButton.setOnClickListener {
             loadNewData()
         }
     }
 
-    private fun loadNewData(){
+    private fun loadNewData() {
         reloadNewsButton.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
 
@@ -78,16 +73,6 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
                 }, { t: Throwable? ->
                     onLoadFailed(t)
                 })
-    }
-
-    private fun showSelectionDialog(){
-        val builder = AlertDialog.Builder(this)
-        builder.setItems(R.array.sections) {_, which -> run {
-            section = resources.getStringArray(R.array.sections)[which]
-            sectionName.text = section
-            loadNewData()
-        } }
-        builder.create().show()
     }
 
     private fun onLoadSuccess(response: Response) {
@@ -110,6 +95,12 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
+        val spinner = menu?.findItem(R.id.menu_spinner)?.actionView as Spinner
+        ArrayAdapter.createFromResource(this, R.array.sections, android.R.layout.simple_spinner_item)
+                .also {
+                    it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinner.adapter = it
+                }
         return true
     }
 
