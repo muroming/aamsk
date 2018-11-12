@@ -11,4 +11,16 @@
     <string name="telegram">Lol nope</string>
     <string name="disclaimer">\@2018 | Nikita Tipun</string>
     <string name="about">About</string>
+    <string name="reloadNews">Reload</string>
+
+    <string-array name="sections">
+        <item>movies</item>
+        <item>theater</item>
+        <item>sundayreview</item>
+        <item>fashion</item>
+        <item>magazine</item>
+        <item>food</item>
+        <item>travel</item>
+        <item>technology</item>
+    </string-array>
 </resources>

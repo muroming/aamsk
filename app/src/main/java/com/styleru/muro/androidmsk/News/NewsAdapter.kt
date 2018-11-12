@@ -5,7 +5,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.styleru.muro.androidmsk.Data.NewsItem
 import com.styleru.muro.androidmsk.R
 import kotlinx.android.synthetic.main.news_item.view.*
@@ -13,11 +14,6 @@ import kotlinx.android.synthetic.main.news_item.view.*
 class NewsAdapter(private val context: Context) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
     private val items: MutableList<NewsItem> = ArrayList()
-
-    fun addItem(item: NewsItem){
-        items.add(item)
-        notifyItemChanged(items.lastIndex)
-    }
 
     interface ViewHolderClick {
         fun onClick(newsItem: NewsItem)
@@ -36,19 +32,38 @@ class NewsAdapter(private val context: Context) : RecyclerView.Adapter<NewsAdapt
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
-        val newsItem = items[p1]
-        p0.category.text = newsItem.category.name
-        p0.title.text = newsItem.title
-        p0.prev.text = newsItem.previewText
-        p0.date.text = newsItem.publishDate.toString()
-        p0.item = newsItem
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val newsItem = items[position]
+        if(newsItem.section != null) {
+            holder.category.text = newsItem.section
+        } else {
+            holder.category.visibility = View.GONE
+        }
+        holder.title.text = newsItem.title
+        holder.prev.text = newsItem.abstract
+        holder.date.text = newsItem.publishedDate
+        holder.item = newsItem
 
-        Picasso.get()
-                .load(newsItem.imageUrl)
-                .fit()
-                .centerCrop()
-                .into(p0.image)
+        if (newsItem.multimedia!= null){
+            var url = ""
+            if (newsItem.multimedia.isNotEmpty()){
+                url = newsItem.multimedia[0].url
+            }
+            Glide.with(holder.view)
+                    .load(url)
+                    .apply(RequestOptions().placeholder(R.drawable.ic_baseline_panorama_24px))
+                    .into(holder.image)
+
+        }
+    }
+
+    fun addNewsItems(newsItems: List<NewsItem>){
+        items.addAll(newsItems)
+        notifyItemRangeInserted(items.size - newsItems.size, newsItems.size)
+    }
+
+    fun clearItems(){
+        items.clear()
     }
 
     class ViewHolder(val view: View, val clickListener: ViewHolderClick) : RecyclerView.ViewHolder(view) {

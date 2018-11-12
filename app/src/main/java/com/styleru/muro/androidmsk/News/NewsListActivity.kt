@@ -6,24 +6,27 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.styleru.muro.androidmsk.Data.DataUtils
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
 import com.styleru.muro.androidmsk.Data.NewsItem
 import com.styleru.muro.androidmsk.*
-import io.reactivex.Observable
+import com.styleru.muro.androidmsk.Data.Response
+import com.styleru.muro.androidmsk.Network.Network
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_news_list.*
-import java.lang.Exception
+import java.io.IOException
 
 class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
 
     private val adapter: NewsAdapter = NewsAdapter(this)
     private lateinit var disposable: Disposable
+    private val client = Network.getApiClient()
+    private var section = "technology"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,41 +41,52 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
 
         newsRecycler.adapter = adapter
 
-        val newsObservable: Observable<NewsItem> = Observable.create {
-            try {
-                val items = DataUtils.generateNews()
-                for (item in items) {
-                    it.onNext(item)
-                    Thread.sleep(500)
-                }
-                it.onComplete()
-            } catch (e: Exception) {
-                if (e is InterruptedException) {
-                    Log.d(ERROR, e.toString())
-                } else {
-                    it.onError(e)
-                }
-            }
-        }
-
-        disposable = newsObservable
-                .subscribeOn(Schedulers.io())
+        disposable = client.getNews(section)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            adapter.addItem(it)
-                            Log.d("LOG_TAG", it.title)
-                        },
-                        {
-                            Log.d(ERROR, it.localizedMessage)
-                        },
-                        {
-                            progress_bar.visibility = View.INVISIBLE
-                            newsRecycler.visibility = View.VISIBLE
-                        })
+                .subscribe({ response ->
+                    onLoadSuccess(response)
+                }, { t: Throwable? ->
+                    onLoadFailed(t)
+                })
 
         adapter.setClickListener(this)
 
+        reloadNewsButton.setOnClickListener {
+            loadNewData()
+        }
+    }
+
+    private fun loadNewData() {
+        reloadNewsButton.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+
+        if (!disposable.isDisposed) {
+            disposable.dispose()
+        }
+
+        adapter.clearItems()
+
+        disposable = client.getNews(section, "json")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    onLoadSuccess(response)
+                }, { t: Throwable? ->
+                    onLoadFailed(t)
+                })
+    }
+
+    private fun onLoadSuccess(response: Response) {
+        adapter.addNewsItems(response.results)
+        progressBar.visibility = View.GONE
+        newsRecycler.visibility = View.VISIBLE
+    }
+
+    private fun onLoadFailed(throwable: Throwable?) {
+        if (throwable is IOException) {
+            progressBar.visibility = View.INVISIBLE
+            reloadNewsButton.visibility = View.VISIBLE
+        }
+        Toast.makeText(this, "Internal Server error please try later", Toast.LENGTH_SHORT).show()
     }
 
     override fun onClick(newsItem: NewsItem) {
@@ -81,6 +95,12 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
+        val spinner = menu?.findItem(R.id.menu_spinner)?.actionView as Spinner
+        ArrayAdapter.createFromResource(this, R.array.sections, android.R.layout.simple_spinner_item)
+                .also {
+                    it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinner.adapter = it
+                }
         return true
     }
 
