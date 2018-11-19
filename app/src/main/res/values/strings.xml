@@ -12,15 +12,24 @@
     <string name="disclaimer">\@2018 | Nikita Tipun</string>
     <string name="about">About</string>
     <string name="reloadNews">Reload</string>
+    <string name="welcome">Welcome</string>
 
     <string-array name="sections">
-        <item>movies</item>
-        <item>theater</item>
-        <item>sundayreview</item>
-        <item>fashion</item>
-        <item>magazine</item>
-        <item>food</item>
-        <item>travel</item>
-        <item>technology</item>
+        <item>Movies</item>
+        <item>Theater</item>
+        <item>Sunday Review</item>
+        <item>Fashion</item>
+        <item>Magazine</item>
+        <item>Food</item>
+        <item>Travel</item>
+        <item>Technology</item>
     </string-array>
+
+    <string name="title_activity_intro2">IntroActivity2</string>
+    <string name="edit_dialog_title">Title</string>
+    <string name="edit_dialog">Edit news</string>
+    <string name="edit_dialog_url">URL</string>
+    <string name="edit_dialog_section">Section</string>
+    <string name="close">Close</string>
+    <string name="save">Save</string>
 </resources>

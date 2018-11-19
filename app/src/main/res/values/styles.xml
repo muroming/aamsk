@@ -8,4 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Intro theme -->
+    <style name="IntroTheme" parent="Theme.AppCompat.Light.NoActionBar" />
+
 </resources>

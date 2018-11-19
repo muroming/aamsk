@@ -1,5 +1,6 @@
 package com.styleru.muro.androidmsk.News
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.support.v7.app.AppCompatActivity
@@ -9,24 +10,33 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
-import com.styleru.muro.androidmsk.Data.NewsItem
 import com.styleru.muro.androidmsk.*
-import com.styleru.muro.androidmsk.Data.Response
+import com.styleru.muro.androidmsk.Database.Data.NewsEntity
+import com.styleru.muro.androidmsk.Database.DatabaseConverter
+import com.styleru.muro.androidmsk.Network.DTO.Response
+import com.styleru.muro.androidmsk.Database.NewsRepository
 import com.styleru.muro.androidmsk.Network.Network
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_news_list.*
-import java.io.IOException
 
-class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
+class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick, AdapterView.OnItemSelectedListener {
 
-    private val adapter: NewsAdapter = NewsAdapter(this)
+    private val adapter: NewsAdapter = NewsAdapter()
     private lateinit var disposable: Disposable
     private val client = Network.getApiClient()
-    private var section = "technology"
+    private var section = "Movies"
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, NewsListActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,13 +51,7 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
 
         newsRecycler.adapter = adapter
 
-        disposable = client.getNews(section)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    onLoadSuccess(response)
-                }, { t: Throwable? ->
-                    onLoadFailed(t)
-                })
+        loadNewDataDB()
 
         adapter.setClickListener(this)
 
@@ -56,17 +60,28 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
         }
     }
 
+    private fun loadNewDataDB() {
+        disposable = NewsRepository.getItems(this, section)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    if (response != null && response.isNotEmpty())
+                        onLoadSuccessDB(response)
+                    else
+                        loadNewData()
+                }, { t: Throwable? ->
+                    onLoadFailedDB(t)
+                })
+    }
+
     private fun loadNewData() {
         reloadNewsButton.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
-
+        newsRecycler.visibility = View.INVISIBLE
         if (!disposable.isDisposed) {
             disposable.dispose()
         }
 
-        adapter.clearItems()
-
-        disposable = client.getNews(section, "json")
+        disposable = client.getNews(section.toLowerCase().replace(" ", ""), "json")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     onLoadSuccess(response)
@@ -76,21 +91,34 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
     }
 
     private fun onLoadSuccess(response: Response) {
-        adapter.addNewsItems(response.results)
+        NewsRepository.saveItems(this, response.results).observeOn(AndroidSchedulers.mainThread())
+                .andThen(NewsRepository.getItems(this, section))
+                .subscribe { result ->
+                    progressBar.visibility = View.GONE
+                    newsRecycler.visibility = View.VISIBLE
+                    adapter.items = result
+                }
+    }
+
+    private fun onLoadSuccessDB(list: List<NewsEntity>) {
+        adapter.items = list
+
         progressBar.visibility = View.GONE
         newsRecycler.visibility = View.VISIBLE
     }
 
     private fun onLoadFailed(throwable: Throwable?) {
-        if (throwable is IOException) {
-            progressBar.visibility = View.INVISIBLE
-            reloadNewsButton.visibility = View.VISIBLE
-        }
+        progressBar.visibility = View.INVISIBLE
+        reloadNewsButton.visibility = View.VISIBLE
         Toast.makeText(this, "Internal Server error please try later", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onClick(newsItem: NewsItem) {
-        NewsDetailsActivity.start(newsItem, this)
+    private fun onLoadFailedDB(throwable: Throwable?) {
+        Toast.makeText(this, "DB Error", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onClick(id: Long) {
+        NewsDetailsActivity.start(id, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -101,6 +129,7 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
                     it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spinner.adapter = it
                 }
+        spinner.onItemSelectedListener = this
         return true
     }
 
@@ -108,6 +137,13 @@ class NewsListActivity : AppCompatActivity(), NewsAdapter.ViewHolderClick {
         super.onStop()
         disposable.dispose()
     }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        section = resources.getStringArray(R.array.sections)[position]
+        loadNewDataDB()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
             when (item.itemId) {

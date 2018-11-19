@@ -1,4 +1,4 @@
-package com.styleru.muro.androidmsk.Data
+package com.styleru.muro.androidmsk.Network.DTO
 
 import com.google.gson.annotations.SerializedName
 

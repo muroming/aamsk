@@ -22,4 +22,8 @@
     <dimen name="refreshButtonHeight">100dp</dimen>
     <dimen name="progressBarSize">100dp</dimen>
     <dimen name="refreshButtonWidth">300dp</dimen>
+    <dimen name="welcomeMargin">30dp</dimen>
+    <dimen name="edit_dialog_padding">16dp</dimen>
+    <dimen name="edit_dialog_et_height">50dp</dimen>
+    <dimen name="edit_dialog_margin">20dp</dimen>
 </resources>
